@@ -6,7 +6,7 @@ function onOpen() {
 
 function showSidebar() {
   var html = HtmlService.createHtmlOutputFromFile('Sidebar')
-      .setTitle('Chatbot');
+      .setTitle('Demo Chatbot');
   DocumentApp.getUi().showSidebar(html);
 }
 
