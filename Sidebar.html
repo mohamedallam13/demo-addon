@@ -13,13 +13,16 @@
       width: 300px;
       border: 1px solid #ddd;
       padding: 10px;
-      overflow-y: scroll;
+      overflow-y: auto;
+      box-sizing: border-box;
     }
     .chat-bubble {
       padding: 10px;
       border-radius: 10px;
       margin: 5px;
       max-width: 80%;
+      word-wrap: break-word;
+      overflow: hidden;
     }
     .user-bubble {
       background-color: #0084ff;
@@ -39,6 +42,7 @@
       padding: 10px;
       border: 1px solid #ddd;
       border-radius: 5px;
+      box-sizing: border-box;
     }
     .input-container button {
       padding: 10px;
@@ -47,6 +51,7 @@
       color: white;
       border-radius: 5px;
       cursor: pointer;
+      margin-left: 5px;
     }
   </style>
 </head>
@@ -81,6 +86,17 @@
         addBubble(response, false);
       }).getOpenAIResponse(userInput);
     }
+
+    function loadConversationHistory() {
+      google.script.run.withSuccessHandler(function(history) {
+        history.forEach(function(entry) {
+          addBubble(entry.user, true);
+          addBubble(entry.bot, false);
+        });
+      }).getConversationHistory();
+    }
+
+    document.addEventListener('DOMContentLoaded', loadConversationHistory);
   </script>
 </body>
 </html>

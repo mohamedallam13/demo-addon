@@ -17,10 +17,17 @@ function getOpenAIResponse(userInput) {
     throw new Error('OpenAI API key not found in script properties');
   }
 
-  var url = 'https://api.openai.com/v1/engines/davinci-codex/completions';
+  var url = 'https://api.openai.com/v1/chat/completions';
   var payload = {
-    "prompt": userInput,
-    "max_tokens": 150
+    "model": "gpt-3.5-turbo",  // or the appropriate model for your use case
+    "messages": [
+      {"role": "system", "content": "You are a helpful assistant."},
+      {"role": "user", "content": userInput}
+    ],
+    "max_tokens": 150,
+    "n": 1,
+    "stop": null,
+    "temperature": 0.7
   };
 
   var options = {
@@ -35,7 +42,7 @@ function getOpenAIResponse(userInput) {
   var response = UrlFetchApp.fetch(url, options);
   var json = response.getContentText();
   var data = JSON.parse(json);
-  var botResponse = data.choices[0].text.trim();
+  var botResponse = data.choices[0].message.content.trim();
 
   // Save conversation history
   saveConversationHistory(userInput, botResponse);
